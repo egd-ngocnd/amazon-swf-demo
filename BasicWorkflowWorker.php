@@ -34,6 +34,7 @@ abstract class BasicWorkflowWorkerStates {
     
     const SECOND_ACTIVITY_COMPLETE = 2;
     // Nothing is open.
+    const NOTHING_OPEN = 3;
 }
 
 /*
@@ -122,7 +123,7 @@ class BasicWorkflowWorker
 
                 sleep(2);
             }
-            return 0;
+            //return 0;
         }
     }
 
@@ -143,7 +144,9 @@ class BasicWorkflowWorker
                          $decision_list = self::_createDecision(2,$event->activityTaskCompletedEventAttributes->result);
                      } elseif($workflow_state === BasicWorkflowWorkerStates::ACTIVITY_COMPLETE){
                          $workflow_state = BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE;
+                         $decision_list = [];
                      }elseif($workflow_state === BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE){
+                         $workflow_state = BasicWorkflowWorkerStates::NOTHING_OPEN;
                          $decision_list = [];
                      }
                      break;
@@ -159,7 +162,12 @@ class BasicWorkflowWorker
                 $decision_list
             ];
         }
-        return [];
+        // nothing to do
+        return [
+            [
+                "decisionType" => "CompleteWorkflowExecution",
+            ]
+        ];
     }
     protected  static function _createDecision($type,$input){
         $activity_type = array(

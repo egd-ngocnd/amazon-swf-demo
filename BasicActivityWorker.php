@@ -88,7 +88,7 @@ class BasicActivityWorker{
 
                 sleep(2);
             }
-            return 0;
+            //return 0;
         }
     }
 
