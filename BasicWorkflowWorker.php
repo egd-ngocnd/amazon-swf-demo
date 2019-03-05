@@ -47,12 +47,6 @@ class BasicWorkflowWorker
     const WORKFLOW_NAME = "myWorkflowName2";
     const WORKFLOW_VERSION = "myWorkflowVersion";
 
-    const ACTIVITY_NAME_KEY = 'activityName';
-    const ACTIVITY_VERSION_KEY = 'activityVersion';
-    const ACTIVITY_TASK_LIST_KEY = 'activityTaskList';
-    const ACTIVITY_INPUT_KEY = 'activityInput';
-    const TIMER_DURATION_KEY = 'timerDuration';
-
     protected $swf;
     protected $domain;
     protected $task_list;
@@ -140,19 +134,16 @@ class BasicWorkflowWorker
     {
         $workflow_state = BasicWorkflowWorkerStates::START;
         $decision_list = null;
-        print_r($history);
         foreach ($history as $event) {
             $event_type = $event->eventType;
              switch ($event_type){
                  case "ActivityTaskCompleted":
                      if ($workflow_state === BasicWorkflowWorkerStates::START){
                          $workflow_state = BasicWorkflowWorkerStates::ACTIVITY_COMPLETE;
-                     }
-                     if($workflow_state === BasicWorkflowWorkerStates::ACTIVITY_COMPLETE){
-                         $workflow_state = BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE;
                          $decision_list = self::_createDecision(2,$event->activityTaskCompletedEventAttributes->result);
-                     }
-                     if($workflow_state === BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE){
+                     } elseif($workflow_state === BasicWorkflowWorkerStates::ACTIVITY_COMPLETE){
+                         $workflow_state = BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE;
+                     }elseif($workflow_state === BasicWorkflowWorkerStates::SECOND_ACTIVITY_COMPLETE){
                          $decision_list = [];
                      }
                      break;
@@ -162,7 +153,7 @@ class BasicWorkflowWorker
                      break;
              }
         }
-        //print_r("Current status: $workflow_state\n");
+        print_r("Current status: $workflow_state\n");
         if ($decision_list != null){
             return [
                 $decision_list
@@ -171,20 +162,26 @@ class BasicWorkflowWorker
         return [];
     }
     protected  static function _createDecision($type,$input){
-        $activityType = array(
-            "name" => 'myActivityName',
-            "version" => 'myActivityVersion'
+        $activity_type = array(
+            "name" => 'fistActivity',
+            "version" => 'fistActivityVersion'
+        );
+        $task_list = array(
+            "name" => "fistActivityTaskList"
         );
         if($type == 2) {
-            $activityType = array(
-                "name" => 'myActivityName2',
-                "version" => 'myActivityVersion2'
+            $activity_type = array(
+                "name" => 'secondActivity',
+                "version" => 'secondActivityVersion'
+            );
+            $task_list = array(
+                "name" => "secondActivityTaskList"
             );
         }
         return array(
             "decisionType" => "ScheduleActivityTask",
             "scheduleActivityTaskDecisionAttributes" => array(
-                "activityType" => $activityType,
+                "activityType" => $activity_type,
                 "activityId" => "myActivity-" .time(),
                 "control" => "this is a sample message",
                 // Customize timeout values
@@ -192,9 +189,7 @@ class BasicWorkflowWorker
                 "scheduleToStartTimeout" => "300",
                 "startToCloseTimeout" => "60",
                 "heartbeatTimeout" => "60",
-                "taskList" => array(
-                    "name" => "activityTaskList"
-                ),
+                "taskList" => $task_list,
                 "input" => "this is a sample message"
             )
         );

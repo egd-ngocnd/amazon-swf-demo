@@ -46,7 +46,6 @@ class BasicActivityWorker{
         while (true) {
             $response = $this->swf->poll_for_activity_task(array(
                 'domain' => $this->domain,
-                'identity' => $this->activity_version,
                 'taskList' => array(
                     'name' => $this->task_list
                 )

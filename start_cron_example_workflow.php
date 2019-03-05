@@ -20,17 +20,12 @@ require_once 'cron_example_utils.php' ;
 
 $swf = new AmazonSWF();
 $domain = 'Aluent-Ngoc';
-$activity_task_list = 'activityTaskList';
 
 register_domain($swf, $domain, 'my domain', 1);
-register_workflow_type($swf, $domain, BasicWorkflowWorker::WORKFLOW_NAME, BasicWorkflowWorker::WORKFLOW_VERSION, $activity_task_list,'Periodically runs stuff');
-
-
+register_workflow_type($swf, $domain, BasicWorkflowWorker::WORKFLOW_NAME, BasicWorkflowWorker::WORKFLOW_VERSION,'Periodically runs stuff');
 
 $workflow_input = json_encode(array(
-    BasicWorkflowWorker::ACTIVITY_TASK_LIST_KEY => $activity_task_list,
-    BasicWorkflowWorker::ACTIVITY_INPUT_KEY => 'World',
-    BasicWorkflowWorker::TIMER_DURATION_KEY => '5'
+    "input" => 'World',
 ));
 
 $decider_task_list = 'deciderTaskList';

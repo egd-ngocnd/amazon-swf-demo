@@ -33,15 +33,12 @@ function register_domain(AmazonSWF $swf, $name, $description, $retention_period_
     }
 }
 
-function register_workflow_type(AmazonSWF $swf, $domain, $name, $version,$taskList, $description) {
+function register_workflow_type(AmazonSWF $swf, $domain, $name, $version,$description) {
     $opts = array(
         'domain' => $domain,
         'name' => $name,
         'version' => $version,
         'description' => $description,
-        'defaultTaskList' => [
-            'name' => $taskList
-        ]
     );
 
     $response = $swf->registerWorkflowType($opts);
@@ -61,7 +58,6 @@ function register_activity_type(AmazonSWF $swf, $domain, $name, $version, $descr
         'name' => $name,
         'version' => $version,
         'description' => $description,
-        ""
     );
 
     $response = $swf->registerActivityType($opts);

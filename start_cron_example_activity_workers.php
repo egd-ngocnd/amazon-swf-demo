@@ -20,11 +20,10 @@ require_once 'cron_example_utils.php' ;
 $swf = new AmazonSWF();
 $domain = 'Aluent-Ngoc';
 
-$activity_name = "myActivityName";
-$activity_version = "myActivityVersion";
-register_activity_type($swf, $domain,$activity_name,$activity_version, 'Does some work');
+$activity_name = "fistActivity";
+$activity_version = "fistActivityVersion";
+$activity_task_list = 'fistActivityTaskList';
 
-$activity_task_list = 'activityTaskList';
 $activity_worker = new BasicActivityWorker($swf, $domain, $activity_task_list,$activity_name,$activity_version,"hello");
 
 echo "Starting activity worker polling\n";
