@@ -134,6 +134,14 @@ class BasicWorkflowWorker
         foreach ($history as $event) {
             $event_type = $event->eventType;
              switch ($event_type){
+                 case 'ActivityTaskCanceled':
+                     break;
+                 case 'ActivityTaskFailed':
+                     break;
+                 case 'ActivityTaskTimedOut':
+                     break;
+                 case 'ActivityTaskScheduled':
+                     break;
                  case "ActivityTaskCompleted":
                      if ($workflow_state === BasicWorkflowWorkerStates::START){
                          $workflow_state = BasicWorkflowWorkerStates::ACTIVITY_COMPLETE;
