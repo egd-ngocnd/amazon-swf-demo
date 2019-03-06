@@ -15,16 +15,10 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'sdk.class.php';
 require_once 'BasicActivityWorker.php' ;
-require_once 'cron_example_utils.php' ;
+require_once 'Config.php';
 
 $swf = new AmazonSWF();
-$domain = 'Aluent-Ngoc';
+$activity_worker = new BasicActivityWorker($swf, Config::DOMAIN, Config::SECOND_ACTIVITY_TASK_LIST,Config::FIRST_ACTIVITY_NAME,Config::SECOND_ACTIVITY_VERSION,"welcome");
 
-$activity_name = "fistActivity";
-$activity_version = "fistActivityVersion";
-$activity_task_list = 'fistActivityTaskList';
-
-$activity_worker = new BasicActivityWorker($swf, $domain, $activity_task_list,$activity_name,$activity_version,"hello");
-
-echo "Starting activity worker polling\n";
+echo "Starting second activity worker polling\n";
 $activity_worker->start();

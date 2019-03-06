@@ -16,14 +16,9 @@
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'sdk.class.php';
 require_once 'BasicActivityWorker.php' ;
 require_once 'BasicWorkflowWorker.php' ;
-require_once 'cron_example_utils.php' ;
+require_once 'Config.php';
 
 $swf = new AmazonSWF();
-$domain = 'Aluent-Ngoc';
-
-register_domain($swf, $domain, 'my domain', 1);
-register_workflow_type($swf, $domain, BasicWorkflowWorker::WORKFLOW_NAME, BasicWorkflowWorker::WORKFLOW_VERSION,'Periodically runs stuff');
-
 $workflow_input = json_encode(array(
     "input" => 'World',
 ));
@@ -31,11 +26,11 @@ $workflow_input = json_encode(array(
 $decider_task_list = 'deciderTaskList';
 
 $opts = array(
-    'domain' => $domain,
+    'domain' => Config::DOMAIN,
     'workflowId' => 'myWorkflowId-' . time(),
     'workflowType' => array(
-        'name' => BasicWorkflowWorker::WORKFLOW_NAME,
-        'version' => BasicWorkflowWorker::WORKFLOW_VERSION
+        'name' => Config::WORKFLOW_NAME,
+        'version' => Config::WORKFLOW_VERSION
     ),
     'input' => $workflow_input,
     'childPolicy' => 'TERMINATE',

@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'sdk.class.php';
-
+require_once "Config.php";
 /*
  * A decider can be written by modeling the workflow as a state machine.
  * For complex workflows, this is the easiest model to use.
@@ -44,10 +44,6 @@ abstract class BasicWorkflowWorkerStates {
 class BasicWorkflowWorker
 {
     const DEBUG = true;
-
-    const WORKFLOW_NAME = "myWorkflowName2";
-    const WORKFLOW_VERSION = "myWorkflowVersion";
-
     protected $swf;
     protected $domain;
     protected $task_list;
@@ -111,8 +107,8 @@ class BasicWorkflowWorker
                         echo "RespondDecisionTaskCompleted FAIL\n";
                         echo "Response body: \n";
                         print_r($complete_response->body);
-                        echo "Request JSON: \n";
-                        echo json_encode($complete_opt) . "\n";
+                        //echo "Request JSON: \n";
+                        //echo json_encode($complete_opt) . "\n";
                     }
                 } else {
                     echo "PollForDecisionTask received empty response\n";
@@ -171,19 +167,19 @@ class BasicWorkflowWorker
     }
     protected  static function _createDecision($type,$input){
         $activity_type = array(
-            "name" => 'fistActivity',
-            "version" => 'fistActivityVersion'
+            "name" => Config::FIRST_ACTIVITY_NAME,
+            "version" => Config::FIRST_ACTIVITY_VERSION,
         );
         $task_list = array(
-            "name" => "fistActivityTaskList"
+            "name" => Config::FIRST_ACTIVITY_TASK_LIST,
         );
         if($type == 2) {
             $activity_type = array(
-                "name" => 'secondActivity',
-                "version" => 'secondActivityVersion'
+                "name" => Config::SECOND_ACTIVITY_NAME,
+                "version" => Config::SECOND_ACTIVITY_VERSION
             );
             $task_list = array(
-                "name" => "secondActivityTaskList"
+                "name" => Config::SECOND_ACTIVITY_TASK_LIST
             );
         }
         return array(
@@ -198,7 +194,7 @@ class BasicWorkflowWorker
                 "startToCloseTimeout" => "60",
                 "heartbeatTimeout" => "60",
                 "taskList" => $task_list,
-                "input" => "this is a sample message"
+                "input" => json_encode($input),
             )
         );
     }

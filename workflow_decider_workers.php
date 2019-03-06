@@ -14,17 +14,12 @@
  * permissions and limitations under the License.
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'sdk.class.php';
-require_once 'BasicActivityWorker.php' ;
-require_once 'cron_example_utils.php' ;
+require_once 'BasicWorkflowWorker.php' ;
+require_once "Config.php";
 
 $swf = new AmazonSWF();
-$domain = 'Aluent-Ngoc';
 
-$activity_name = "secondActivity";
-$activity_version = "secondActivityVersion";
-$activity_task_list = "secondActivityTaskList";
-
-$activity_worker = new BasicActivityWorker($swf, $domain, $activity_task_list,$activity_name,$activity_version,"welcome");
-
-echo "Starting activity 2 worker polling\n";
-$activity_worker->start();
+echo "Starting workflow worker polling\n";
+$decider_task_list = 'deciderTaskList';
+$workflow_worker = new BasicWorkflowWorker($swf, Config::DOMAIN, $decider_task_list);
+$workflow_worker->start();
