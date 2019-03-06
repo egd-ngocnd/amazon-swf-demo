@@ -20,6 +20,6 @@ require_once "Config.php";
 $swf = new AmazonSWF();
 
 echo "Starting workflow worker polling\n";
-$decider_task_list = 'deciderTaskList';
-$workflow_worker = new BasicWorkflowWorker($swf, Config::DOMAIN, $decider_task_list);
+
+$workflow_worker = new BasicWorkflowWorker($swf, Config::DOMAIN, Config::DECIDER_TASK_LIST);
 $workflow_worker->start();

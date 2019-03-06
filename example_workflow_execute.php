@@ -23,8 +23,6 @@ $workflow_input = json_encode(array(
     "input" => 'World',
 ));
 
-$decider_task_list = 'deciderTaskList';
-
 $opts = array(
     'domain' => Config::DOMAIN,
     'workflowId' => 'myWorkflowId-' . time(),
@@ -37,7 +35,7 @@ $opts = array(
     // This is what specifying a task list at scheduling time looks like.
     // You can also register a type with a default task list and not specify one at scheduling time.
     // The value provided at scheduling time always takes precedence.
-    'taskList' => array('name' => $decider_task_list),
+    'taskList' => array('name' => Config::DECIDER_TASK_LIST),
     // This is what specifying timeouts at scheduling time looks like.
     // You can also register types with default timeouts and not specify them at scheduling time.
     // The value provided at scheduling time always takes precedence.

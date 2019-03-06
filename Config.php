@@ -11,6 +11,7 @@ class Config
     const DOMAIN = 'Aluent-Ngoc';
     const WORKFLOW_NAME = "myWorkflowName2";
     const WORKFLOW_VERSION = "myWorkflowVersion";
+    const DECIDER_TASK_LIST = "deciderTaskList";
 
     const FIRST_ACTIVITY_NAME = "firstActivity";
     const FIRST_ACTIVITY_VERSION = "firstActivityVersion";
